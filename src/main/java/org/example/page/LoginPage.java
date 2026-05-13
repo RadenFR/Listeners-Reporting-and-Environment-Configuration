@@ -13,7 +13,7 @@ public class LoginPage extends BasePage {
     @FindBy(id = "password")
     private WebElement passwordInput;
 
-    @FindBy(id = "submit")
+    @FindBy(id = "login-button")
     private WebElement submitButton;
 
     @FindBy(css = "[data-test='error']")
@@ -48,15 +48,6 @@ public class LoginPage extends BasePage {
             return errorAlert.isDisplayed();
         } catch (Exception e) {
             return false;
-        }
-    }
-
-    public String getErrorMessage() {
-        try {
-            waitForElementToBeVisible(errorAlert);
-            return errorAlert.getText();
-        } catch (Exception e) {
-            return "";
         }
     }
 }

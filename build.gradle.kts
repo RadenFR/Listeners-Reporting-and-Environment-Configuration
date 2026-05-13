@@ -11,6 +11,11 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
 
 dependencies {
     testImplementation("org.testng:testng:7.10.2")
@@ -23,6 +28,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.25.1")
     implementation("org.apache.logging.log4j:log4j-api:2.25.1")
     implementation("commons-io:commons-io:2.15.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.25.1")
 }
 
 
