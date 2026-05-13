@@ -47,6 +47,7 @@ public class TestListener implements ITestListener {
         extent.setSystemInfo("OS", System.getProperty("os.name"));
         extent.setSystemInfo("Java Version", System.getProperty("java.version"));
         extent.setSystemInfo("User", System.getProperty("user.name"));
+        extent.setSystemInfo("Browser", System.getProperty("Chrome"));
         extent.setSystemInfo("Environment", System.getProperty("env", "staging"));
 
         new File(SCREENSHOT_DIR).mkdirs();
@@ -70,13 +71,38 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
+
         String testName = result.getMethod().getMethodName();
+
         long duration = result.getEndMillis() - result.getStartMillis();
 
-        log.info("Test PASSED: {} (Duration: {}ms)", testName, duration);
+        log.info("========== TEST PASSED ==========");
+        log.info("Test Name : {}", testName);
+        log.info("Execution Time : {} ms", duration);
 
-        extentTest.get().log(Status.PASS, "Test executed successfully");
-        extentTest.get().log(Status.INFO, "Execution time: " + duration + "ms");
+        extentTest.get().log(Status.PASS,
+                "Test executed successfully");
+
+        extentTest.get().log(Status.INFO,
+                "Execution time: " + duration + " ms");
+
+        // Capture screenshot
+        String screenshotPath = captureScreenshot(testName);
+
+        if (screenshotPath != null) {
+            try {
+                extentTest.get().addScreenCaptureFromPath(
+                        screenshotPath,
+                        "Screenshot on success"
+                );
+                log.info("Screenshot attached to ExtentReport");
+                log.info("Screenshot path: {}", screenshotPath);
+            } catch (Exception e) {
+                log.error("Failed to attach screenshot");
+                log.error("Error message: {}", e.getMessage());
+            }
+        }
+        log.info("========== END TEST SUCCESS ==========");
     }
 
     @Override
